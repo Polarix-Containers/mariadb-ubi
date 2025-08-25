@@ -1,4 +1,4 @@
-name: Build UBI Latest
+name: Build UBI 11.4
 
 on:
   workflow_dispatch:
@@ -6,8 +6,8 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/build-latest.yml'
-      - 'latest/**'
+      - '.github/workflows/build-11.4.yml'
+      - '11.4/**'
   schedule:
     # Build the image daily
     - cron: '15 0 * * *'
@@ -15,7 +15,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: polarix-containers/mariadb
-  TAG: latest
+  TAG: 11.8
 
 jobs:
   build:
@@ -52,10 +52,9 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            ubi
-            12-ubi
-            latest-ubi
-            latest
+            ${{ env.TAG }}-ubi
+            11-ubi
+            lts-ubi
 
       - name: Build and push Docker image
         id: build-and-push
@@ -78,7 +77,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:ubi
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}-ubi
           format: template
           template: '@/contrib/sarif.tpl'
           output: trivy-results.sarif
@@ -103,7 +102,7 @@ jobs:
         uses: anchore/scan-action@v6
         id: grype
         with:
-          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:ubi
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}-ubi
           fail-build: false
 
       - name: Upload Grype scan results to GitHub Security tab

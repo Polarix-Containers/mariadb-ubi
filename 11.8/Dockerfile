@@ -1,4 +1,4 @@
-ARG VERSION=12
+ARG VERSION=11.8
 ARG UID=200011
 ARG GID=200011
 
@@ -13,7 +13,7 @@ USER root
 
 RUN microdnf -y upgrade \
     && rm -rf /usr/local/bin/gosu \
-    && curl https://copr.fedorainfracloud.org/coprs/secureblue/hardened_malloc/repo/rhel-10/secureblue-hardened_malloc-rhel-10.repo \
+    && curl https://copr.fedorainfracloud.org/coprs/secureblue/hardened_malloc/repo/rhel-9/secureblue-hardened_malloc-rhel-9.repo \
         -o /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:secureblue:hardened_malloc.repo \
     && microdnf install -y crypto-policies-scripts hardened_malloc shadow-utils \
     && update-crypto-policies --set FUTURE \
