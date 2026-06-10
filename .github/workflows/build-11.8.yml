@@ -54,7 +54,6 @@ jobs:
           tags: |
             ${{ env.TAG }}-ubi
             11-ubi
-            lts-ubi
 
       - name: Build and push Docker image
         id: build-and-push

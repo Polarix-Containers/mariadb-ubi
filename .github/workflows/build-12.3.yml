@@ -1,4 +1,4 @@
-name: Build UBI Latest
+name: Build UBI 12.3
 
 on:
   workflow_dispatch:
@@ -6,8 +6,8 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/build-latest.yml'
-      - 'latest/**'
+      - '.github/workflows/build-12.3.yml'
+      - '12.3/**'
   schedule:
     # Build the image daily
     - cron: '15 0 * * *'
@@ -15,7 +15,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: polarix-containers/mariadb
-  TAG: latest
+  TAG: 12.3
 
 jobs:
   build:
@@ -52,8 +52,10 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            ubi
+            ${{ env.TAG }}-ubi
             12-ubi
+            lts-ubi
+            ubi
             latest-ubi
             latest
 
